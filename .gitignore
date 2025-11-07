@@ -1,0 +1,48 @@
+# Build outputs
+bin/
+obj/
+Debug/
+Release/
+
+# Visual Studio
+.vs/
+*.user
+*.swp
+*.suo
+*.userprefs
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# Logs
+*.log
+logs/
+
+# DotNet tooling
+project.lock.json
+artifacts/
+
+# Node / React client
+node_modules/
+**/build/
+**/dist/
+.npm/
+pm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Misc
+Thumbs.db
+.DS_Store
+*.orig
