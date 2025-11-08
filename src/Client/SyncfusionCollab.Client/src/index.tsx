@@ -7,11 +7,11 @@ import reportWebVitals from './reportWebVitals';
 
 import { registerLicense } from '@syncfusion/ej2-base';
 
-const syncfusionLicenseKey = process.env.REACT_APP_SYNCFUSION_LICENSE_KEY;
+const syncfusionLicenseKey = process.env.SYNCFUSION_LICENSE_KEY;
 
 if (!syncfusionLicenseKey) {
   // Log once during startup so missing secrets are obvious in development
-  console.warn('Syncfusion license key is not configured. Set REACT_APP_SYNCFUSION_LICENSE_KEY before building.');
+  console.warn('Syncfusion license key is not configured. Set SYNCFUSION_LICENSE_KEY before building.');
 } else {
   registerLicense(syncfusionLicenseKey);
 }

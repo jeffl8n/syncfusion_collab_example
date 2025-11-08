@@ -10,7 +10,7 @@ DocumentEditorContainerComponent.Inject(Toolbar, Ribbon);
 // tslint:disable:max-line-length
 class Editor extends React.Component {
     private static resolveServiceUrl(): string {
-        const baseUrl = process.env.REACT_APP_API_BASE ?? 'http://localhost:5212';
+    const baseUrl = process.env.SYNCFUSION_API_BASE ?? 'http://localhost:5212';
         return baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
     }
 

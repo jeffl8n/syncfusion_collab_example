@@ -1,0 +1,52 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/your-org/syncfusion-collab-server
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+  annotations: {}
+
+licenseSecret:
+  create: true
+  name: ""
+  existing: ""
+  key: licenseKey
+  value: ""
+
+redis:
+  connectionString: ""
+  existingSecret: ""
+  key: connectionString
+
+env:
+  aspnetcoreEnvironment: Production
+  extra: []
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+livenessProbe: {}
+readinessProbe: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []

@@ -9,15 +9,15 @@ var server = builder.AddProject<Projects.SyncfusionCollab_Server>("server")
 	.WithReference(redis, "RedisConnectionString")
 	.WaitFor(redis)
 	.WithExternalHttpEndpoints()
-	.WithEnvironment("Syncfusion__LicenseKey", syncfusionLicenseKey);
+	.WithEnvironment("SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
 
 var clientWorkingDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "Client", "SyncfusionCollab.Client"));
 
 var client = builder.AddNpmApp("client", clientWorkingDirectory)
 	.WithHttpEndpoint(targetPort: 3000)
 	.WithEnvironment("PORT", "3000")
-	.WithEnvironment("REACT_APP_API_BASE", server.GetEndpoint("http"))
-	.WithEnvironment("REACT_APP_SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
+	.WithEnvironment("SYNCFUSION_API_BASE", server.GetEndpoint("http"))
+	.WithEnvironment("SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
 
 client.WithReference(server);
 

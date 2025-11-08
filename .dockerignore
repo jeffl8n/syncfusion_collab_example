@@ -1,0 +1,8 @@
+.git
+.aspire/
+bin/
+obj/
+**/bin/
+**/obj/
+**/node_modules/
+src/Client/SyncfusionCollab.Client/build/
