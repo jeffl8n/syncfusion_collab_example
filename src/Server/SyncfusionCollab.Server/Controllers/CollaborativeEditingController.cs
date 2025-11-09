@@ -249,7 +249,7 @@ namespace SyncfusionCollab.Server.Controllers
 
         internal static Syncfusion.EJ2.DocumentEditor.WordDocument GetSourceDocument()
         {
-            string path = fileLocation + "\\Giant Panda.docx";
+            string path = Path.Combine(fileLocation, "Giant Panda.docx");
             int index = path.LastIndexOf('.');
             string type = index > -1 && index < path.Length - 1 ?
               path.Substring(index) : ".docx";
