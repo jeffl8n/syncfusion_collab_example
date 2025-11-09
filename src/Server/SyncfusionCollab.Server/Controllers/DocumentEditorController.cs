@@ -10,6 +10,12 @@ namespace SyncfusionCollab.Server.Controllers
     [ApiController]
     public class DocumentEditorController : ControllerBase
     {
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
+        public DocumentEditorController(IWebHostEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
 
         [AcceptVerbs("Post")]
         [HttpPost]
@@ -92,6 +98,46 @@ namespace SyncfusionCollab.Server.Controllers
         {
             public string content { get; set; }
             public string type { get; set; }
+        }
+
+        [AcceptVerbs("Post")]
+        [HttpPost]
+        [EnableCors("AllowAllOrigins")]
+        [Route("AutoSave")]
+        public string AutoSave()
+        {
+            try
+            {
+                var form = HttpContext.Request.Form;
+                if ((form?.Files?.Count ?? 0) == 0)
+                {
+                    return "NoFile";
+                }
+
+                var file = form.Files[0];
+                var fileName = form["fileName"].FirstOrDefault() ?? file.FileName ?? "document.docx";
+
+                var autosaveDir = Path.Combine(_hostingEnvironment.WebRootPath, "autosaves");
+                if (!Directory.Exists(autosaveDir))
+                {
+                    Directory.CreateDirectory(autosaveDir);
+                }
+                var savePath = Path.Combine(autosaveDir, fileName);
+
+                using (var target = System.IO.File.Open(savePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var stream = new MemoryStream())
+                {
+                    file.CopyTo(stream);
+                    stream.Position = 0;
+                    stream.CopyTo(target);
+                }
+
+                return "Success";
+            }
+            catch
+            {
+                return "Error";
+            }
         }
 
         [AcceptVerbs("Post")]

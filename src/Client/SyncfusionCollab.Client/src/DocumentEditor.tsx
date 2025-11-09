@@ -10,6 +10,8 @@ DocumentEditorContainerComponent.Inject(Toolbar, Ribbon);
 
 // tslint:disable:max-line-length
 class Editor extends React.Component {
+    private contentChanged: boolean = false;
+    private autoSaveIntervalId?: number;
     private static resolveServiceUrl(): string {
         const cfg = getConfig();
         const baseUrl = cfg.SYNCFUSION_API_BASE ?? process.env.REACT_APP_SYNCFUSION_API_BASE ?? 'http://localhost:5212';
@@ -41,6 +43,7 @@ class Editor extends React.Component {
         if (this.collaborativeEditingHandler) {
             this.container.contentChange = (args: ContainerContentChangeEventArgs) => {
                 this.collaborativeEditingHandler?.sendActionToServer(args.operations as Operation[]);
+                this.contentChanged = true;
             };
         }
         if (!this.connection) {
@@ -50,6 +53,30 @@ class Editor extends React.Component {
         this.container.ribbon?.showTab('Developer', false);
 
         this.titleBar?.updateDocumentTitle();
+
+        // Start autosave timer to persist document changes periodically
+        if (!this.autoSaveIntervalId && this.container) {
+            this.autoSaveIntervalId = window.setInterval(() => {
+                if (this.contentChanged && this.container) {
+                    this.container.documentEditor.saveAsBlob('Docx').then((blob: Blob) => {
+                        const formData: FormData = new FormData();
+                        const fileName = 'Giant Panda.docx';
+                        formData.append('fileName', fileName);
+                        formData.append('data', blob);
+                        const req = new XMLHttpRequest();
+                        req.open('POST', this.serviceUrl + 'api/documenteditor/AutoSave', true);
+                        req.onreadystatechange = () => {
+                            if (req.readyState === 4) {
+                                if (req.status === 200 || req.status === 304) {
+                                    this.contentChanged = false;
+                                }
+                            }
+                        };
+                        req.send(formData);
+                    });
+                }
+            }, 1000);
+        }
     }
 
     public componentDidMount(): void {
@@ -66,6 +93,13 @@ class Editor extends React.Component {
             //Enable the collaborative editing in DocumentEditor
             this.container.documentEditor.enableCollaborativeEditing = true;
             this.container.documentEditor.layoutType = 'Continuous';
+        }
+    }
+
+    public componentWillUnmount(): void {
+        if (this.autoSaveIntervalId) {
+            window.clearInterval(this.autoSaveIntervalId);
+            this.autoSaveIntervalId = undefined;
         }
     }
 
