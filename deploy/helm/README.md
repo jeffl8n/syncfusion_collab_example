@@ -19,3 +19,20 @@ helm upgrade --install collab-ui ./syncfusion-collab-ui `
 ```
 
 Supply additional values or YAML files as needed for production settings (ingress, TLS, resource limits, etc.).
+
+## POC Script (AKS + Redis + Images)
+
+For a quick proof-of-concept, use the PowerShell script to build/push images to ACR, deploy Redis into AKS, deploy the API (LoadBalancer), wait for its external IP, then build and deploy the UI (LoadBalancer):
+
+```
+pwsh ./deploy/scripts/deploy-aks-poc.ps1 `
+  -AcrName crsyncfusion `
+  -AksName aks-syncfusion `
+  -SyncfusionLicenseKey "<your-syncfusion-license-key>" `
+  -UseAcrBuild
+```
+
+Notes:
+- Requires Azure CLI, kubectl, and helm. If you omit `-UseAcrBuild`, you also need Docker.
+- The script creates/uses the `collab` namespace and tags images with a `poc-<timestamp>` by default.
+- Both API and UI services are exposed as `LoadBalancer` for simplicity in a POC.

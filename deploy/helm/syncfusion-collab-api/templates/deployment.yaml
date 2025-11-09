@@ -36,7 +36,7 @@ spec:
       {{- end }}
       containers:
         - name: api
-          {{- $tag := default .Chart.AppVersion .Values.image.tag -}}
+          {{- $tag := default .Chart.AppVersion .Values.image.tag }}
           image: {{ printf "%s:%s" .Values.image.repository $tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.securityContext }}

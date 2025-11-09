@@ -5,7 +5,7 @@ This workspace combines a collaborative editing ASP.NET Core API, a React client
 ## Projects
 
 - `src/Server/SyncfusionCollab.Server` – ASP.NET Core 8 Web API that hosts the Syncfusion Document Editor collaborative editing endpoints and SignalR hub. Redis is used to synchronize operations between users.
-- `src/Client/SyncfusionCollab.Client` – React (TypeScript) single-page application providing the document editor UI. The API base URL is read from the `SYNCFUSION_API_BASE` environment variable.
+- `src/Client/SyncfusionCollab.Client` - React (TypeScript) single-page application providing the document editor UI. The API base URL is read from the `REACT_APP_SYNCFUSION_API_BASE` environment variable.
 - `src/AppHost/SyncfusionCollab.AppHost` – .NET Aspire AppHost that runs the API, client, and a Redis container from a single dashboard experience.
 
 ## Prerequisites
@@ -27,7 +27,7 @@ This workspace combines a collaborative editing ASP.NET Core API, a React client
    ```pwsh
    dotnet run --project src/AppHost/SyncfusionCollab.AppHost
    ```
-   The Aspire dashboard opens in the browser. From the dashboard you can start or stop the API (`server`), Redis, and the React client (`client`). The client is exposed through the dashboard and is already configured to call the API through the `SYNCFUSION_API_BASE` environment variable.
+   The Aspire dashboard opens in the browser. From the dashboard you can start or stop the API (`server`), Redis, and the React client (`client`). The client is exposed through the dashboard and is already configured to call the API through the `REACT_APP_SYNCFUSION_API_BASE` environment variable.
 
 3. **Direct runs (optional)**
    - API only:
@@ -40,7 +40,7 @@ This workspace combines a collaborative editing ASP.NET Core API, a React client
      cd src/Client/SyncfusionCollab.Client
      npm start
      ```
-   Set `SYNCFUSION_API_BASE` before launching if the API is not running through Aspire.
+   Set `REACT_APP_SYNCFUSION_API_BASE` before launching if the API is not running through Aspire.
 
 ## Configuration
 

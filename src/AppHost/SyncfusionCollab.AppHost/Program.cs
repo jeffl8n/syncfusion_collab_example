@@ -16,8 +16,8 @@ var clientWorkingDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirect
 var client = builder.AddNpmApp("client", clientWorkingDirectory)
 	.WithHttpEndpoint(targetPort: 3000)
 	.WithEnvironment("PORT", "3000")
-	.WithEnvironment("SYNCFUSION_API_BASE", server.GetEndpoint("http"))
-	.WithEnvironment("SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
+	.WithEnvironment("REACT_APP_SYNCFUSION_API_BASE", server.GetEndpoint("http"))
+	.WithEnvironment("REACT_APP_SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
 
 client.WithReference(server);
 

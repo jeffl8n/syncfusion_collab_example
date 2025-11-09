@@ -1,8 +1,39 @@
+# Global ignores for Docker build context at repo root
+
+# Git and IDE
 .git
-.aspire/
-bin/
-obj/
+.gitignore
+.gitattributes
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.log
+Thumbs.db
+.DS_Store
+
+.azure/
+
+# Dotnet build output
 **/bin/
 **/obj/
+**/TestResults/
+
+# Node/React client artifacts
 **/node_modules/
 src/Client/SyncfusionCollab.Client/build/
+src/Client/SyncfusionCollab.Client/.cache/
+src/Client/SyncfusionCollab.Client/npm-debug.log*
+src/Client/SyncfusionCollab.Client/yarn-error.log*
+
+# Coverage and reports
+coverage/
+**/coverage/
+reports/
+
+# OS junk
+**/*.orig
+**/*.rej
+

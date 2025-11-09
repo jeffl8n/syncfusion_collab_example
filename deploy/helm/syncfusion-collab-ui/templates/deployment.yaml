@@ -33,7 +33,7 @@ spec:
       {{- end }}
       containers:
         - name: ui
-          {{- $tag := default .Chart.AppVersion .Values.image.tag -}}
+          {{- $tag := default .Chart.AppVersion .Values.image.tag }}
           image: {{ printf "%s:%s" .Values.image.repository $tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.securityContext }}
@@ -46,11 +46,11 @@ spec:
           {{- if or .Values.env.apiBaseUrl .Values.env.licenseKey .Values.env.extra }}
           env:
             {{- if .Values.env.apiBaseUrl }}
-            - name: SYNCFUSION_API_BASE
+            - name: REACT_APP_SYNCFUSION_API_BASE
               value: {{ .Values.env.apiBaseUrl | quote }}
             {{- end }}
             {{- if .Values.env.licenseKey }}
-            - name: SYNCFUSION_LICENSE_KEY
+            - name: REACT_APP_SYNCFUSION_LICENSE_KEY
               value: {{ .Values.env.licenseKey | quote }}
             {{- end }}
             {{- with .Values.env.extra }}
