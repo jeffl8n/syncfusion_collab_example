@@ -13,8 +13,11 @@ var server = builder.AddProject<Projects.SyncfusionCollab_Server>("server")
 
 var clientWorkingDirectory = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "Client", "SyncfusionCollab.Client"));
 
+var clientDependencies = builder.AddNpmApp("client-deps", clientWorkingDirectory, "install:deps");
+
 var client = builder.AddNpmApp("client", clientWorkingDirectory)
 	.WithHttpEndpoint(targetPort: 3000)
+	.WaitFor(clientDependencies)
 	.WithEnvironment("PORT", "3000")
 	.WithEnvironment("REACT_APP_SYNCFUSION_API_BASE", server.GetEndpoint("http"))
 	.WithEnvironment("REACT_APP_SYNCFUSION_LICENSE_KEY", syncfusionLicenseKey);
