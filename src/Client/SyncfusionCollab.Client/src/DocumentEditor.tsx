@@ -2,7 +2,6 @@ import * as React from 'react';
 import { DocumentEditorContainerComponent, Toolbar, Ribbon, CollaborativeEditingHandler, ContainerContentChangeEventArgs, Operation } from '@syncfusion/ej2-react-documenteditor';
 import { DocumentEditor } from '@syncfusion/ej2-react-documenteditor';
 import { TitleBar } from './title-bar';
-import { getConfig } from './config';
 import { HubConnectionBuilder, HttpTransportType, HubConnectionState, HubConnection } from '@microsoft/signalr';
 import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
 
@@ -10,15 +9,8 @@ DocumentEditorContainerComponent.Inject(Toolbar, Ribbon);
 
 // tslint:disable:max-line-length
 class Editor extends React.Component {
-    private contentChanged: boolean = false;
-    private static resolveServiceUrl(): string {
-        const cfg = getConfig();
-        const baseUrl = cfg.SYNCFUSION_API_BASE ?? process.env.REACT_APP_SYNCFUSION_API_BASE ?? 'http://localhost:5212';
-        return baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-    }
-
-    public serviceUrl = Editor.resolveServiceUrl();
-    public container: DocumentEditorContainerComponent | null = null;
+    public serviceUrl = 'http://localhost:5212/';
+    public container!: DocumentEditorContainerComponent | null;
     public titleBar?: TitleBar;
     public collaborativeEditingHandler?: CollaborativeEditingHandler;
     public connectionId: string = '';
@@ -42,7 +34,6 @@ class Editor extends React.Component {
         if (this.collaborativeEditingHandler) {
             this.container.contentChange = (args: ContainerContentChangeEventArgs) => {
                 this.collaborativeEditingHandler?.sendActionToServer(args.operations as Operation[]);
-                this.contentChanged = true;
             };
         }
         if (!this.connection) {
@@ -162,7 +153,7 @@ class Editor extends React.Component {
                 }
             }
         };
-        httpRequest.send(JSON.stringify({ "fileName": "Giant Panda.docx", "roomName": roomId }));
+        httpRequest.send(JSON.stringify({ "fileName": "Giant Panda.docx", "documentOwner": roomId }));
     }
 
     public connectToRoom(data: any) {

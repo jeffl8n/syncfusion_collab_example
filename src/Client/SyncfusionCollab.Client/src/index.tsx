@@ -5,31 +5,14 @@ import './App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { registerLicense } from '@syncfusion/ej2-base';
-import { loadConfig, getConfig } from './config';
-
-async function bootstrap() {
-  await loadConfig();
-
-  const cfg = getConfig();
-  const syncfusionLicenseKey = cfg.SYNCFUSION_LICENSE_KEY ?? process.env.REACT_APP_SYNCFUSION_LICENSE_KEY;
-  if (!syncfusionLicenseKey) {
-    console.warn('Syncfusion license key is not configured. Set REACT_APP_SYNCFUSION_LICENSE_KEY or provide it via app-config.json.');
-  } else {
-    registerLicense(syncfusionLicenseKey);
-  }
-
-  const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
-  );
-  root.render(
-    // <React.StrictMode>
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+ // <React.StrictMode>
     <App />
-    //</React.StrictMode>
-  );
-}
-
-bootstrap();
+  //</React.StrictMode>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
