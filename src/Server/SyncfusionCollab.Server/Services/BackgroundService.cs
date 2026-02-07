@@ -82,7 +82,7 @@ namespace SyncfusionCollab.Server.Service
 
                 //Save the document to file location. We can modified the below code and save the document to any location.
                 //Save the stream to the location you want.
-                SaveDocument(stream, "Getting Started.docx");
+                SaveDocument(stream, "Giant Panda.docx");
                 stream.Close();
                 document.Dispose();
                 handler = null;

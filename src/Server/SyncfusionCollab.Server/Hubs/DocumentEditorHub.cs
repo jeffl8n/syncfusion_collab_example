@@ -52,7 +52,7 @@ namespace SyncfusionCollab.Server.Hubs
             // Notify all the exsisiting users in the group about the new user
             await Clients.GroupExcept(info.RoomName, Context.ConnectionId).SendAsync("dataReceived", "addUser", info);
         }
-    public override async Task OnDisconnectedAsync(Exception e)
+        public override async Task OnDisconnectedAsync(Exception? e)
         {
             //Get the room name associated with the connection ID
             string roomName = await _db.HashGetAsync(CollaborativeEditingHelper.ConnectionIdRoomMappingKey, Context.ConnectionId);

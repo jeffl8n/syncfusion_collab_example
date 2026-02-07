@@ -10,12 +10,6 @@ namespace SyncfusionCollab.Server.Controllers
     [ApiController]
     public class DocumentEditorController : ControllerBase
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
-
-        public DocumentEditorController(IWebHostEnvironment hostingEnvironment)
-        {
-            _hostingEnvironment = hostingEnvironment;
-        }
 
         [AcceptVerbs("Post")]
         [HttpPost]

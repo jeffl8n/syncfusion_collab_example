@@ -16,7 +16,6 @@ if (string.IsNullOrWhiteSpace(syncfusionLicenseKey))
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncfusionLicenseKey);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddHealthChecks();
 
 builder.Services.AddCors(options =>
 {
@@ -28,15 +27,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("Redis")
-    ?? builder.Configuration.GetConnectionString("RedisConnectionString")
-    ?? builder.Configuration["ConnectionStrings:RedisConnectionString"]
-    ?? throw new InvalidOperationException("Redis connection string is not configured.");
+var config = builder.Configuration;
+var redisConfig = config.GetSection("ConnectionStrings");
+var connectionString = redisConfig["RedisConnectionString"];
 
 //Configure SignalR
 builder.Services.AddSignalR().AddStackExchangeRedis(connectionString, options =>
 {
-    options.Configuration.ChannelPrefix = RedisChannel.Literal("docedit");
+    options.Configuration.ChannelPrefix = "docedit";
 });
 
 
@@ -60,36 +58,23 @@ builder.Services.AddHostedService<QueuedHostedService>();
 
 var app = builder.Build();
 
-// Startup diagnostics for content root
-try
-{
-    var envHost = app.Services.GetRequiredService<IWebHostEnvironment>();
-    var webRoot = envHost.WebRootPath;
-    app.Logger.LogInformation("WebRootPath: {WebRootPath}", webRoot);
-    var sampleDoc = Path.Combine(webRoot, "Giant Panda.docx");
-    app.Logger.LogInformation("Sample doc exists at {DocPath}: {Exists}", sampleDoc, File.Exists(sampleDoc));
-}
-catch (Exception ex)
-{
-    app.Logger.LogWarning(ex, "Failed to log web root diagnostics");
-}
-
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseCors();
-app.UseAuthorization();
-
-app.MapControllers();
-
-// Liveness/readiness endpoint
-app.MapHealthChecks("/healthz");
 
 app.MapHub<DocumentEditorHub>("/documenteditorhub");
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=LogIn}/{userName?}/{id?}");
+app.MapControllers();
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=LogIn}/{userName?}/{id?}");
+});
 
 app.Run();

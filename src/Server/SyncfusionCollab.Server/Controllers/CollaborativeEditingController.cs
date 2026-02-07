@@ -36,7 +36,7 @@ namespace SyncfusionCollab.Server.Controllers
         [HttpPost]
         [Route("ImportFile")]
         [EnableCors("AllowAllOrigins")]
-    public async Task<string> ImportFile([FromBody] Model.FileInfo param)
+        public async Task<string> ImportFile([FromBody] Model.FileInfo param)
         {
             try
             {
@@ -47,15 +47,16 @@ namespace SyncfusionCollab.Server.Controllers
                 // We can modify the code to retrieve the document from a different location or source.
                 Syncfusion.EJ2.DocumentEditor.WordDocument document = GetSourceDocument();
                 // Get the list of pending operations for the document
-                List<ActionInfo> actions = await GetPendingOperations(param.fileName, 0, -1);
+                List<ActionInfo> actions = await GetPendingOperations(param.documentOwner, 0, -1);
+                content.version = 0;
                 if (actions != null && actions.Count > 0)
                 {
                     // If there are any pending actions, update the document with these actions
                     document.UpdateActions(actions);
+                    content.version = actions.Last().Version;
                 }
                 // Serialize the updated document to SFDT format
                 string sfdt = Newtonsoft.Json.JsonConvert.SerializeObject(document);
-                content.version = 0;
                 content.sfdt = sfdt;
                 // Dispose of the document to free resources
                 document.Dispose();
@@ -249,7 +250,7 @@ namespace SyncfusionCollab.Server.Controllers
 
         internal static Syncfusion.EJ2.DocumentEditor.WordDocument GetSourceDocument()
         {
-            string path = Path.Combine(fileLocation, "Giant Panda.docx");
+            string path = fileLocation + "\\Giant Panda.docx";
             int index = path.LastIndexOf('.');
             string type = index > -1 && index < path.Length - 1 ?
               path.Substring(index) : ".docx";

@@ -84,7 +84,7 @@ namespace SyncfusionCollab.Server.Model
             -- Define arguments: item to insert, client's version, and threshold for cache
             local item = ARGV[1]
             local clientVersion = ARGV[2]
-            local threshold = tonumber(ARGV[3])
+            local threshold = tonumber(ARGV[3])     
 
             -- Retrieve the current revision from Redis, or initialize it if it doesn't exist
             local revision = redis.call('GET', revisionKey)
@@ -100,22 +100,9 @@ namespace SyncfusionCollab.Server.Model
             -- Adjust clientVersion based on effectiveVersion
             clientVersion = tonumber(clientVersion) - effectiveVersion
 
-            -- Determine the current length of the list to make sure the computed index is valid
-            local listLength = redis.call('LLEN', listKey)
-
-            -- Resolve the target index if the entry still exists in the trimmed list
-            if listLength > 0 then
-                if clientVersion >= 0 then
-                    if clientVersion < listLength then
-                        redis.call('LSET', listKey, clientVersion, item)
-                    end
-                else
-                    local normalizedIndex = listLength + clientVersion
-                    if normalizedIndex >= 0 then
-                        redis.call('LSET', listKey, clientVersion, item)
-                    end
-                end
-            end";
+            -- Update the list at the position calculated by the adjusted clientVersion
+            -- This effectively 'inserts' the item into the list at the position reflecting the client's view of the list
+            redis.call('LSET', listKey, clientVersion, item)";
 
         internal static string EffectivePendingOperations = @"
              -- Define the keys for accessing the list and revision in Redis
